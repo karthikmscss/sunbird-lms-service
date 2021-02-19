@@ -827,6 +827,9 @@ public class UserManagementActor extends BaseActor {
     if (JsonKey.SUCCESS.equalsIgnoreCase((String) response.get(JsonKey.RESPONSE))) {
       Map<String, Object> orgMap = saveUserOrgInfo(userMap, actorMessage.getRequestContext());
       esResponse = Util.getUserDetails(userMap, orgMap, actorMessage.getRequestContext());
+      if (StringUtils.isNotBlank((String) requestMap.get(JsonKey.EMAIL))) {
+    	  sendEmailAndSms(userMap, actorMessage.getRequestContext());
+      }
     } else {
       logger.info(
           actorMessage.getRequestContext(),
