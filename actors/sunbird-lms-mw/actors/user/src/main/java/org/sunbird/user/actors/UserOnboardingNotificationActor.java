@@ -12,6 +12,8 @@ import org.sunbird.learner.util.Util;
 import org.sunbird.services.sso.SSOManager;
 import org.sunbird.services.sso.SSOServiceFactory;
 import org.sunbird.user.util.UserActorOperations;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 
 @ActorConfig(
   tasks = {},
@@ -43,6 +45,15 @@ public class UserOnboardingNotificationActor extends BaseActor {
       // user created successfully send the onboarding mail
       Request welcomeMailReqObj = Util.sendOnboardingMail(requestMap);
       welcomeMailReqObj.setRequestContext(request.getRequestContext());
+      
+      ObjectMapper mapper = new ObjectMapper();
+      try {
+        logger.info("Onbording Mail Object .......");
+        logger.info(mapper.writeValueAsString(welcomeMailReqObj));
+      } catch (JsonProcessingException e) {
+        e.printStackTrace();
+      }
+      
       if (null != welcomeMailReqObj) {
         tellToAnother(welcomeMailReqObj);
       }
