@@ -1,6 +1,9 @@
 package org.sunbird.user.actors;
 
 import java.util.Map;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.sunbird.actor.core.BaseActor;
 import org.sunbird.actor.router.ActorConfig;
@@ -43,6 +46,15 @@ public class UserOnboardingNotificationActor extends BaseActor {
       // user created successfully send the onboarding mail
       Request welcomeMailReqObj = Util.sendOnboardingMail(requestMap);
       welcomeMailReqObj.setRequestContext(request.getRequestContext());
+      
+       ObjectMapper mapper = new ObjectMapper();
+      try {
+        logger.info("Onbording Mail Object .......");
+        logger.info(mapper.writeValueAsString(welcomeMailReqObj));
+      } catch (JsonProcessingException e) {
+        logger.error("Ex", e);
+      }
+      
       if (null != welcomeMailReqObj) {
         tellToAnother(welcomeMailReqObj);
       }
