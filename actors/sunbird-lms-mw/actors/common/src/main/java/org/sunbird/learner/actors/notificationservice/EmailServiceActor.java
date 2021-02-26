@@ -7,6 +7,9 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang.StringUtils;
@@ -70,6 +73,15 @@ public class EmailServiceActor extends BaseActor {
 
   @SuppressWarnings({"unchecked"})
   private void sendMail(Request actorMessage) {
+    
+     ObjectMapper mapper = new ObjectMapper();
+    try {
+      logger.info("Received Notification Object .......");
+      logger.info(mapper.writeValueAsString(actorMessage));
+    } catch (JsonProcessingException e) {
+      logger.error("Ex", e);
+    }
+    
     Map<String, Object> request =
         (Map<String, Object>) actorMessage.getRequest().get(JsonKey.EMAIL_REQUEST);
 
