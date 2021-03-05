@@ -47,10 +47,6 @@ public class ProjectUtil {
     "mailTemplates.properties"
   };
   public static PropertiesCache propertiesCache;
-  private static Pattern pattern;
-  private static final String EMAIL_PATTERN =
-      "^[_A-Za-z0-9-\\.+]+(\\.[_A-Za-z0-9-]+)*@"
-          + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
   public static final String[] excludes =
       new String[] {
         JsonKey.COMPLETENESS, JsonKey.MISSING_FIELDS, JsonKey.PROFILE_VISIBILITY, JsonKey.LOGIN_ID
@@ -62,7 +58,6 @@ public class ProjectUtil {
   private static ObjectMapper mapper = new ObjectMapper();
 
   static {
-    pattern = Pattern.compile(EMAIL_PATTERN);
     propertiesCache = PropertiesCache.getInstance();
   }
 
@@ -214,8 +209,7 @@ public class ProjectUtil {
     if (StringUtils.isBlank(email)) {
       return false;
     }
-    Matcher matcher = pattern.matcher(email);
-    return matcher.matches();
+    return email.matches(getConfigValue(JsonKey.SUNBIRD_EMAIL_REGEX));
   }
 
   public enum UserRole {
